@@ -8,4 +8,8 @@ public @interface Revision {
 
 	String name();
 
+	String date();
+
+	String comment();
+
 }
