@@ -9,7 +9,7 @@ public class GetRevisionTest {
 
 	
 	@Test
-	public void start() throws Exception {
+	public void getDataFromAnnotation() throws Exception {
 		assertNotNull(Updated.class.getAnnotation(Revision.class)); 
 		assertEquals("Vass",Updated.class.getAnnotation(Revision.class).name());
 	}
