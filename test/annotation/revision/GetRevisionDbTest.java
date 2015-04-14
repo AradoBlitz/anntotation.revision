@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,10 +41,9 @@ public class GetRevisionDbTest {
 	@Test
 	public void addToDataBaseRevisionDataFromClass() throws Exception {
 		
-		ResultSet result;
-		assertEquals("Vass", author);
-		assertEquals("30.06.2015", date);
-		assertEquals("Bla Bla", comment);
+		Statement stmt = connection.createStatement();
+		ResultSet result = stmt.executeQuery("select * from revision");
+		assertTrue(result.next());
 	}
 	
 	@Test
