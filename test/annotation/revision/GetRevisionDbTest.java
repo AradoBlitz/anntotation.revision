@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.junit.After;
@@ -34,6 +35,15 @@ public class GetRevisionDbTest {
 	public void closeConnection() throws Exception {
 		connection.createStatement().executeUpdate("drop table revision;");
 		connection.close();
+	}
+	
+	@Test
+	public void addToDataBaseRevisionDataFromClass() throws Exception {
+		
+		ResultSet result;
+		assertEquals("Vass", author);
+		assertEquals("30.06.2015", date);
+		assertEquals("Bla Bla", comment);
 	}
 	
 	@Test
