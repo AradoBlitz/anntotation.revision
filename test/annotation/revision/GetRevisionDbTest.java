@@ -37,10 +37,10 @@ public class GetRevisionDbTest {
 		connection.createStatement().executeUpdate("drop table revision;");
 		connection.close();
 	}
-	
+	@Ignore
 	@Test
 	public void addToDataBaseRevisionDataFromClass() throws Exception {
-		
+		connection.createStatement().executeUpdate("insert into revision values ('Vass','30.06.2015','Bla Bla');");
 		Statement stmt = connection.createStatement();
 		ResultSet result = stmt.executeQuery("select * from revision");
 		assertTrue(result.next());
