@@ -34,7 +34,7 @@ public class GetRevisionTest {
 	
 	@Test
 	public void noAnnotated(){
-		Class noAnnotatedClass = NoAnotated.class;
+		final Class noAnnotatedClass = NoAnotated.class;
 		assertNull("getAnnotation should return null.",noAnnotatedClass.getAnnotation(Revision.class));
 	}
 	
