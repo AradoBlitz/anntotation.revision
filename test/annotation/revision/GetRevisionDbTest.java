@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -26,6 +27,13 @@ public class GetRevisionDbTest {
 	public void createConnection() throws Exception {
 		Class.forName("org.hsqldb.jdbcDriver");
 		connection = DriverManager.getConnection("jdbc:hsqldb:mem:test","sa","");
+		connection.createStatement().executeUpdate("create table revision (author CHAR,date CHAR,comment CHAR);");
+	}
+	
+	@After
+	public void closeConnection() throws Exception {
+		connection.createStatement().executeUpdate("drop table revision;");
+		connection.close();
 	}
 	
 	@Test
@@ -36,7 +44,7 @@ public class GetRevisionDbTest {
 	
 	@Test
 	public void testEnvironmentsSchema() throws Exception {
-		assertEquals(0,connection.createStatement().executeUpdate("create table revision (author CHAR,date CHAR,comment CHAR);"));
+		
 		assertTrue(isTableExists("REVISION"));
 	}
 
