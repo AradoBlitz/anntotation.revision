@@ -35,8 +35,9 @@ public class GetRevisionDbTest {
 	}
 	
 	@Test
-	public void newDataBaseShouldBeEmpty() throws Exception {
-		assertFalse(isTableExists("revision"));
+	public void testEnvironmentsSchema() throws Exception {
+		assertEquals(0,connection.createStatement().executeUpdate("create table revision (author CHAR,date CHAR,comment CHAR);"));
+		assertTrue(isTableExists("REVISION"));
 	}
 
 	private boolean isTableExists(String tableNamePattern) throws SQLException {
