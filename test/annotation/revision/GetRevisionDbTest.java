@@ -17,6 +17,7 @@ public class GetRevisionDbTest {
 
 	
 	private Connection connection;
+	
 
 	@Ignore
 	@Test
@@ -30,6 +31,7 @@ public class GetRevisionDbTest {
 		Class.forName("org.hsqldb.jdbcDriver");
 		connection = DriverManager.getConnection("jdbc:hsqldb:mem:test","sa","");
 		connection.createStatement().executeUpdate("create table revision (author CHAR(10),date CHAR(10),comment CHAR(100));");
+	
 	}
 	
 	@After
@@ -40,9 +42,11 @@ public class GetRevisionDbTest {
 
 	@Test
 	public void addToDataBaseRevisionDataFromClass() throws Exception {
-		connection.createStatement().executeUpdate("insert into revision values ('Vass','30.06.2015','Bla Bla');");
-		Statement stmt = connection.createStatement();
-		ResultSet result = stmt.executeQuery("select * from revision");
+		UpdateDao updateDao = new UpdateDao(new Update("Vass","30.06.2015","Bla Bla"));
+		
+		updateDao.saveTo("jdbc:hsqldb:mem:test","sa","");
+		
+		ResultSet result = connection.createStatement().executeQuery("select * from revision");
 		assertTrue(result.next());
 	}
 	
