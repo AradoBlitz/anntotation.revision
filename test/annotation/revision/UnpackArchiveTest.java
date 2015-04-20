@@ -50,7 +50,7 @@ public class UnpackArchiveTest {
 				ZipEntry entry = entries.nextElement();
 				if(!entry.getName().contains(".class"))
 					continue;
-				Class class1 = new MyClassLoader().toClass(zipFile,entry);			
+				Class class1 = toClass(zipFile,entry);			
 			classList.add(class1);
 			}
 			return classList;
