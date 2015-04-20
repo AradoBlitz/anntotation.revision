@@ -32,7 +32,7 @@ public class UnpackArchiveTest {
 	
 	}
 	
-	static class MyClassLoader extends ClassLoader{
+	static class JarArchive extends ClassLoader{
 	
 		public Class toClass(ZipFile zipFile, ZipEntry entry) throws Exception{
 			InputStream entriesInput =  zipFile.getInputStream(entry);
@@ -67,13 +67,13 @@ public class UnpackArchiveTest {
 		byte[] buffer = new byte[1024*2];
 		InputStream input = new FileInputStream("/home/dmitriy/Projects/Java/portfolio/annotation.revision/bin/annotation/revision/UpdateDao.class");
 		int read = input.read(buffer);
-		assertNotNull(new MyClassLoader().toClass(Arrays.copyOf(buffer , read)));
+		assertNotNull(new JarArchive().toClass(Arrays.copyOf(buffer , read)));
 	}
 	
 	@Test
 	public void getClassObject() throws Exception {
 		ZipFile zipFile = new ZipFile("./etc/Untitled.jar");
-		Class class1 = new MyClassLoader().toClass(zipFile,zipFile.getEntry(revisionedTestClass));
+		Class class1 = new JarArchive().toClass(zipFile,zipFile.getEntry(revisionedTestClass));
 		assertNotNull(class1);
 		assertEquals("annotation.revision.UnpackArchiveTest$Revisioned", class1.getName());
 	}
@@ -81,6 +81,6 @@ public class UnpackArchiveTest {
 	@Test
 	public void getClassListFromArchive() throws Exception {
 		
-		assertEquals(9, new MyClassLoader().extractClasses("./etc/Untitled.jar").size());
+		assertEquals(9, new JarArchive().extractClasses("./etc/Untitled.jar").size());
 	}
 }
