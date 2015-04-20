@@ -1,5 +1,6 @@
 package annotation.revision;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,10 +13,16 @@ public class JarArchive extends ClassLoader{
 	
 	public Class toClass(ZipFile zipFile, ZipEntry entry) throws Exception{
 		InputStream entriesInput =  zipFile.getInputStream(entry);
-		byte[] buffer = new byte[1024*13];
-		int read = entriesInput.read(buffer);
-		byte[] b = Arrays.copyOf(buffer, read);
-		return defineClass(entry.getName().replaceAll("/", ".").replaceAll(".class", ""), b , 0, read);
+		ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1024];
+		int read = 0;
+		int count  = 0;
+		while((read = entriesInput.read(buffer))!=-1){
+			byteBuffer.write(buffer, 0, read);
+			count+=read;
+		}
+
+		return defineClass(entry.getName().replaceAll("/", ".").replaceAll(".class", ""), byteBuffer.toByteArray() , 0, count);
 	}
 
 	public List<Class> extractClasses(String archiveName) throws Exception{
