@@ -53,5 +53,6 @@ public class UnpackArchiveTest {
 	public void getClassListFromArchive() throws Exception {
 		
 		assertEquals(9, new JarArchive().extractClasses("./etc/Untitled.jar").size());
+		assertEquals(new UpdateDao(new Update("Vass", "30.10.2015", "Some comment about about.")), new JarArchive().readPackage("./etc/Untitled.jar"));
 	}
 }

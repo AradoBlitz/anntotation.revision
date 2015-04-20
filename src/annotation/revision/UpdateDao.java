@@ -22,4 +22,11 @@ public class UpdateDao {
 		
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+
+		return getClass().equals(obj.getClass());
+	}
+
+	
 }

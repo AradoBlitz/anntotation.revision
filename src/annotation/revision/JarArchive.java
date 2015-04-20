@@ -43,5 +43,10 @@ public class JarArchive extends ClassLoader{
 		
 		return defineClass("annotation.revision.UpdateDao", copyOf, 0, copyOf.length);
 	}
+
+	public UpdateDao readPackage(String string) {
+		// TODO Auto-generated method stub
+		return new UpdateDao(null);
+	}
 }
 
