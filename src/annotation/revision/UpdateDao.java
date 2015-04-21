@@ -24,8 +24,12 @@ public class UpdateDao {
 
 	@Override
 	public boolean equals(Object obj) {
-
-		return getClass().equals(obj.getClass());
+		if(getClass().equals(obj.getClass())){
+			UpdateDao dao = (UpdateDao)obj;
+			if(update!=null && dao.update == null)
+				return false;
+		return update.name.equals(dao.update.name);
+		} else { return false;}
 	}
 
 	

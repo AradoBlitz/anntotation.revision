@@ -51,6 +51,21 @@ public class GetRevisionDbTest {
 	}
 	
 	@Test
+	public void UpdateDaoequality() throws Exception {
+		assertEquals(new UpdateDao(new Update("Vass","30.06.2015","Bla Bla")), new UpdateDao(new Update("Vass","30.06.2015","Bla Bla")));
+		try{
+		assertFalse(
+				new UpdateDao(new Update("Peter","27.09.2015","Bla Bla"))
+					.equals(new UpdateDao(null)));
+		}catch (NullPointerException e){
+			fail();
+		}
+		assertFalse(
+				new UpdateDao(new Update("Peter","27.09.2015","Bla Bla"))
+					.equals(new UpdateDao(new Update("Vass","30.06.2015","Bla Bla"))));
+	}
+	
+	@Test
 	public void createEmbeddedDataBase() throws Exception {
 		
 		assertFalse("Connection should be openned.",connection.isClosed());
