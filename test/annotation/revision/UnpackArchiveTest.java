@@ -47,13 +47,17 @@ public class UnpackArchiveTest {
 		Class class1 = new JarArchive().toClass(zipFile,zipFile.getEntry(revisionedTestClass));
 		assertNotNull(class1);
 		assertEquals("annotation.revision.UnpackArchiveTest$Revisioned", class1.getName());
+		class1 = new JarArchive().toClass(zipFile,zipFile.getEntry("annotation/revision/GetRevisionTest$Updated.class"));
+		assertNotNull(class1);
+		assertNotNull(Update.extract(class1));
 	}
 	
 	@Test
 	public void getClassListFromArchive() throws Exception {
 		
-		assertEquals(9, new JarArchive().extractClasses("./etc/Untitled.jar").size());
-		//simple requirement equality for UpdateDao instance object.
+		List<Class> classList = new JarArchive().extractClasses("./etc/Untitled.jar");
+		assertEquals(9, classList.size());
+		assertTrue("annotation/revision/GetRevisionTest$Updated.class".contains(".class"));
 		assertEquals(new UpdateDao(new Update("Vass", "30.10.2015", "Some comment about about.")), new JarArchive().readPackage("./etc/Untitled.jar"));
 	}
 }
