@@ -51,6 +51,7 @@ public class GetRevisionDbTest {
 				new UpdateDao(new Update("Peter","27.09.2015","Bla Bla"))
 					.equals(new UpdateDao((Update)null)));
 		}catch (NullPointerException e){
+			e.printStackTrace();
 			fail();
 		}
 		assertFalse(

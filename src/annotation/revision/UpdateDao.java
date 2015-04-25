@@ -9,10 +9,8 @@ import java.util.List;
 public class UpdateDao {
 
 	private  final List<Update> updateList = new ArrayList<Update>();
-	private Update update;
-
+	
 	public UpdateDao(Update update) {
-		this.update = update;
 		updateList.add(update);
 	}
 
@@ -33,13 +31,34 @@ public class UpdateDao {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((updateList == null) ? 0 : updateList.hashCode());
+		return result;
+	}
+
+
+	@Override
 	public boolean equals(Object obj) {
-		if(getClass().equals(obj.getClass())){
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		
 			UpdateDao dao = (UpdateDao)obj;
-			if(update!=null && dao.update == null)
-				return false;
-		return update.name.equals(dao.update.name);
-		} else { return false;}
+			if(updateList.size()!=0)
+				if( dao.updateList.size() == 0)
+					return false;
+			
+		
+			return updateList.get(0).equals(dao.updateList.get(0));
+			
+			
+		 
 	}
 
 	
