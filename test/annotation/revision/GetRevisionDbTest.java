@@ -1,5 +1,6 @@
 package annotation.revision;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 
 import java.sql.Connection;
@@ -7,6 +8,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,7 +38,7 @@ public class GetRevisionDbTest {
 
 	@Test
 	public void addToDataBaseRevisionDataFromClass() throws Exception {
-		UpdateDao updateDao = new UpdateDao(new Update("Vass","30.06.2015","Bla Bla"));
+		UpdateDao updateDao = new UpdateDao(asList(new Update("Vass","30.06.2015","Bla Bla")));
 		
 		updateDao.saveTo("jdbc:hsqldb:mem:test","sa","");
 		
@@ -45,18 +48,18 @@ public class GetRevisionDbTest {
 	
 	@Test
 	public void UpdateDaoequality() throws Exception {
-		assertEquals(new UpdateDao(new Update("Vass","30.06.2015","Bla Bla")), new UpdateDao(new Update("Vass","30.06.2015","Bla Bla")));
+		assertEquals(new UpdateDao(asList(new Update("Vass","30.06.2015","Bla Bla"))), new UpdateDao(asList(new Update("Vass","30.06.2015","Bla Bla"))));
 		try{
 		assertFalse(
-				new UpdateDao(new Update("Peter","27.09.2015","Bla Bla"))
-					.equals(new UpdateDao((Update)null)));
+				new UpdateDao(asList(new Update("Peter","27.09.2015","Bla Bla")))
+					.equals(new UpdateDao(new ArrayList<Update>())));
 		}catch (NullPointerException e){
 			e.printStackTrace();
 			fail();
 		}
 		assertFalse(
-				new UpdateDao(new Update("Peter","27.09.2015","Bla Bla"))
-					.equals(new UpdateDao(new Update("Vass","30.06.2015","Bla Bla"))));
+				new UpdateDao(asList(new Update("Peter","27.09.2015","Bla Bla")))
+					.equals(new UpdateDao(asList(new Update("Vass","30.06.2015","Bla Bla")))));
 	}
 	
 	@Test

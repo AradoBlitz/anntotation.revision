@@ -60,7 +60,7 @@ public class UnpackArchiveTest {
 		assertEquals(9, classList.size());
 		assertTrue("annotation/revision/GetRevisionTest$Updated.class".contains(".class"));
 		assertNotNull(classList.get(4).getAnnotation(Revision.class));
-		assertEquals(new UpdateDao(new Update("Vass", "30.10.2015", "Some comment about update")), new JarArchive().readPackage("./etc/Untitled.jar"));
+		assertEquals(new UpdateDao(Arrays.asList(new Update("Vass", "30.10.2015", "Some comment about update"))), new JarArchive().readPackage("./etc/Untitled.jar"));
 	}
 	
 	@Test

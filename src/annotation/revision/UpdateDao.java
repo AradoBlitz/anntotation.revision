@@ -9,10 +9,6 @@ import java.util.List;
 public class UpdateDao {
 
 	private  final List<Update> updateList = new ArrayList<Update>();
-	
-	public UpdateDao(Update update) {
-		updateList.add(update);
-	}
 
 	public UpdateDao(List<Update> updateList){
 		this.updateList.addAll(updateList);
