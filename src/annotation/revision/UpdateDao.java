@@ -1,6 +1,5 @@
 package annotation.revision;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class UpdateDao {
@@ -10,11 +9,6 @@ public class UpdateDao {
 
 	public UpdateDao(Update update) {
 		this.update = update;
-	}
-
-	public void save(Update update) throws Exception {
-		
-		
 	}
 
 	public void saveTo(String path, String user, String pass) throws Exception {
