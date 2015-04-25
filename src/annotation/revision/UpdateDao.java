@@ -49,16 +49,16 @@ public class UpdateDao {
 		if (getClass() != obj.getClass())
 			return false;
 		
-			UpdateDao dao = (UpdateDao)obj;
-			if(updateList.size()!=0)
-				if( dao.updateList.size() == 0)
-					return false;
+		UpdateDao dao = (UpdateDao)obj;
+		if(updateList.size()!=0)
+			if( dao.updateList.size() == 0)
+				return false;
 			
+		for(int i=0;i<updateList.size();i++)
+			if(!updateList.get(i).equals(dao.updateList.get(i)))
+				return false;
 		
-			return updateList.get(0).equals(dao.updateList.get(0));
-			
-			
-		 
+		return true;
 	}
 
 	
