@@ -39,7 +39,7 @@ public class JarArchive extends ClassLoader{
 
 	public List<Class> extractClasses(String archiveName) throws Exception{
 			
-		ZipFile zipFile = new ZipFile("./etc/Untitled.jar");
+		ZipFile zipFile = new ZipFile(archiveName);
 		ArrayList<Class> classList = new ArrayList<Class>();
 		Enumeration<? extends ZipEntry> entries = zipFile.entries();
 		for(;entries.hasMoreElements();){
@@ -64,8 +64,6 @@ public class JarArchive extends ClassLoader{
 	public UpdateDao readPackage(String string) throws Exception {
 		
 		List<Class> extractClasses = extractClasses(string);
-		System.out.println(extractClasses.get(4).getName());
-		System.out.println(extractClasses.get(4).getAnnotation(Revision.class));
 		return new UpdateDao(Update.extract(extractClasses.get(4)));
 	}
 
