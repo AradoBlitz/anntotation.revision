@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -44,6 +45,25 @@ public class GetRevisionDbTest {
 		
 		ResultSet result = connection.createStatement().executeQuery("select * from revision");
 		assertTrue(result.next());
+		String name = result.getString("author");		
+		String date = result.getString("date");		
+		String comment = result.getString("comment");
+		Update expected = new Update("Vass      ", "30.06.2015", "Bla Bla                                                                                             ");
+		assertEquals(expected.name, name);
+		assertEquals(expected.date, date);
+		assertEquals(expected.comment, comment);
+		assertFalse(result.next());
+	}
+	
+	@Test
+	public void readWriteUpdatesToDb() throws Exception {
+		UpdateDao updateDao = new UpdateDao(asList(new Update("Vass","30.06.2015","Bla Bla")));
+		
+		updateDao.saveTo("jdbc:hsqldb:mem:test","sa","");
+		List<Update> actual = UpdateDao.loadFrom("jdbc:hsqldb:mem:test","sa","");
+		
+		Update expected = new Update("Vass      ", "30.06.2015", "Bla Bla                                                                                             ");
+		assertEquals(expected, actual.get(0));
 	}
 	
 	@Test

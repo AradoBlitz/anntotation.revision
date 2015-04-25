@@ -2,6 +2,7 @@ package annotation.revision;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,26 @@ public class UpdateDao {
 				return false;
 		
 		return true;
+	}
+
+	public static List<Update> loadFrom(String url, String login, String password) throws Exception {
+		List<Update> list = new ArrayList<Update>();
+		Connection connection = DriverManager.getConnection(url,login,password);
+		Statement stmt = connection.createStatement();
+		ResultSet result = stmt.executeQuery("select * from revision");
+		try{
+			while (result.next()){
+				String name = result.getString("author");		
+				String date = result.getString("date");		
+				String comment = result.getString("comment");
+				list.add(new Update(name, date, comment));
+			}
+			return list;
+		}finally{
+			result.close();
+			stmt.close();
+			connection.close();
+		}
 	}
 
 	
