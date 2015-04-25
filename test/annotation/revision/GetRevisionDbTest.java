@@ -49,7 +49,7 @@ public class GetRevisionDbTest {
 		try{
 		assertFalse(
 				new UpdateDao(new Update("Peter","27.09.2015","Bla Bla"))
-					.equals(new UpdateDao(null)));
+					.equals(new UpdateDao((Update)null)));
 		}catch (NullPointerException e){
 			fail();
 		}

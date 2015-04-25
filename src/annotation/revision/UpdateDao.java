@@ -1,16 +1,22 @@
 package annotation.revision;
 
 import java.sql.DriverManager;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UpdateDao {
 
-	
+	private  final List<Update> updateList = new ArrayList<Update>();
 	private Update update;
 
 	public UpdateDao(Update update) {
 		this.update = update;
 	}
 
+	public UpdateDao(List<Update> updateList){
+		this.updateList.addAll(updateList);
+	}
+	
 	public void saveTo(String path, String user, String pass) throws Exception {
 		DriverManager.getConnection(path,user,pass).createStatement().executeUpdate("insert into revision values ('" + update.name + "','" + update.date + "','" + update.comment + "');");
 		
