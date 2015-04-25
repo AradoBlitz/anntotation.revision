@@ -1,6 +1,8 @@
 package annotation.revision;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ public class UpdateDao {
 
 	public UpdateDao(Update update) {
 		this.update = update;
+		updateList.add(update);
 	}
 
 	public UpdateDao(List<Update> updateList){
@@ -18,8 +21,15 @@ public class UpdateDao {
 	}
 	
 	public void saveTo(String path, String user, String pass) throws Exception {
-		DriverManager.getConnection(path,user,pass).createStatement().executeUpdate("insert into revision values ('" + update.name + "','" + update.date + "','" + update.comment + "');");
-		
+		Connection connection = DriverManager.getConnection(path,user,pass);
+		Statement stmt = connection.createStatement();
+		try{
+			for(Update update:updateList)		
+				stmt.executeUpdate("insert into revision values ('" + update.name + "','" + update.date + "','" + update.comment + "');");
+		}finally{
+			stmt.close();
+			connection.close();
+		}
 	}
 
 	@Override
