@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
@@ -58,6 +59,39 @@ public class UnpackArchiveTest {
 		List<Class> classList = new JarArchive().extractClasses("./etc/Untitled.jar");
 		assertEquals(9, classList.size());
 		assertTrue("annotation/revision/GetRevisionTest$Updated.class".contains(".class"));
+		assertNotNull(classList.get(4).getAnnotation(Revision.class));
 		assertEquals(new UpdateDao(new Update("Vass", "30.10.2015", "Some comment about about.")), new JarArchive().readPackage("./etc/Untitled.jar"));
+	}
+	
+	@Test
+	public void checkIsZipEntryChangedAfterGetingItsName() throws Exception {
+		
+		ZipFile zipFile = new ZipFile("./etc/Untitled.jar");
+		ZipEntry extractedByName = zipFile.getEntry("annotation/revision/GetRevisionTest$Updated.class");
+		Enumeration<? extends ZipEntry> entries = zipFile.entries();
+		entries.nextElement();entries.nextElement();entries.nextElement();
+		entries.nextElement();entries.nextElement();
+		ZipEntry extractedByGetNameMethod = entries.nextElement();
+		assertEquals(extractedByName.getSize() ,extractedByGetNameMethod.getSize());
+		entries.hasMoreElements();
+		assertTrue(extractedByGetNameMethod.getName().contains(".class"));
+		assertNotNull(new JarArchive().toClass(zipFile, extractedByGetNameMethod).getAnnotation(Revision.class));
+		
+	}
+	
+	@Test
+	public void revisionIsNotLoadedWhenToClassMethodReused() throws Exception {
+		ZipFile zipFile = new ZipFile("./etc/Untitled.jar");
+		final int updatedInJar = 4;
+		ArrayList<Class> classList = new ArrayList<Class>();
+		Enumeration<? extends ZipEntry> entries = zipFile.entries();
+		JarArchive jarArchive = new JarArchive();
+		for(;entries.hasMoreElements();){
+			ZipEntry extractedByGetNameMethod = entries.nextElement();		
+			if(extractedByGetNameMethod.getName().contains(".class")){		
+			classList.add(jarArchive.toClass(zipFile, extractedByGetNameMethod));
+		}}		
+		assertNull(classList.get(updatedInJar).getAnnotation(Revision.class));
+		
 	}
 }
