@@ -19,13 +19,6 @@ public class GetRevisionDbTest {
 	private Connection connection;
 	
 
-	@Ignore
-	@Test
-	public void putRevisionDataFromClassToDb() throws Exception {
-		
-		
-	}
-	
 	@Before
 	public void createConnection() throws Exception {
 		Class.forName("org.hsqldb.jdbcDriver");
