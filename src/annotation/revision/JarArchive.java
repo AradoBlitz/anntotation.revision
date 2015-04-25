@@ -57,13 +57,8 @@ public class JarArchive extends ClassLoader{
 	}
 
 	public UpdateDao readPackage(String pathToJar) throws Exception {
-		List<Update> updateList = new ArrayList<>();
-		for (Class extractedClasses : extractClasses(pathToJar)){		
-			Update extract = Update.extract(extractedClasses);
-			if(extract!=null)
-				updateList.add(extract);
-		}
-		return new UpdateDao(updateList);
+		
+		return new UpdateDao(Update.convertToList(extractClasses(pathToJar)));
 	}
 
 	

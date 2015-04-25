@@ -1,5 +1,8 @@
 package annotation.revision;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Update {
 
 	public final String name;
@@ -62,6 +65,16 @@ public class Update {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	public static List<Update> convertToList(List<Class> extractClasses) {
+		List<Update> updateList = new ArrayList<>();
+		for (Class extractedClasses : extractClasses){		
+			Update extract = Update.extract(extractedClasses);
+			if(extract!=null)
+				updateList.add(extract);
+		}
+		return updateList;
 	}
 
 	
