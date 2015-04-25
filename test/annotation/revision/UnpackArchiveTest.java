@@ -39,7 +39,7 @@ public class UnpackArchiveTest {
 		byte[] buffer = new byte[1024*4];
 		InputStream input = new FileInputStream("/home/dmitriy/Projects/Java/portfolio/annotation.revision/bin/annotation/revision/UpdateDao.class");
 		int read = input.read(buffer);
-		assertNotNull(new JarArchive().toClass(Arrays.copyOf(buffer , read)));
+		assertNotNull(new JarArchive().defineClass("annotation.revision.UpdateDao",Arrays.copyOf(buffer , read)));
 	}
 	
 	@Test

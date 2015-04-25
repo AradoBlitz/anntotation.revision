@@ -51,44 +51,21 @@ public class JarArchive extends ClassLoader{
 		return classList;
 	}
 
-	public Class toClass(byte[] copyOf) {
 		
-		return defineClass("annotation.revision.UpdateDao", copyOf, 0, copyOf.length);
-	}
-	
-	public Class toClass(String name, byte[] copyOf) {
-		
+	public Class defineClass(String name, byte[] copyOf) {		
 		return defineClass(name, copyOf, 0, copyOf.length);
 	}
 
-	public UpdateDao readPackage(String string) throws Exception {
-		
-		List<Class> extractClasses = extractClasses(string);
-		return new UpdateDao(Update.extract(extractClasses.get(4)));
+	public UpdateDao readPackage(String pathToJar) throws Exception {
+		List<Update> updateList = new ArrayList<>();
+		for (Class extractedClasses : extractClasses(pathToJar)){		
+			Update extract = Update.extract(extractedClasses);
+			if(extract!=null)
+				updateList.add(extract);
+		}
+		return new UpdateDao(updateList);
 	}
 
-	private Collection<? extends Class> extractZipClasses(String string) throws Exception {
-		ZipInputStream input = new ZipInputStream(new FileInputStream(string));
-		List<Class> classList = new ArrayList<Class>();
-		
-		ZipEntry entry = null;
-		while((entry = input.getNextEntry())!=null){
-			byte[] buff = new byte[1024];
-			int read = 0;
-			if(entry.getName().contains(".class")) {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			
-				while(read!=-1){
-					input.read(buff);
-					out.write(buff);
-				}
-				
-				classList.add(toClass(out.toByteArray()));
-				out.close();
-			}
-			input.closeEntry();
-		}
-		return classList;
-	}
+	
 }
 
