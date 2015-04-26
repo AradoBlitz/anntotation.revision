@@ -2,6 +2,7 @@ package annotation.revision;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Update {
@@ -32,15 +33,10 @@ public class Update {
 		comment = revision.comment();
 	}
 
-	/*
-	 * Problem detected - this method can extracted either one class annotaion or one method annotation.
-	 * */
 	public static Update extract(Class updated) {
 		if(updated.getAnnotation(Revision.class)!=null)
 			return new Update(updated);
-		for(Method method:updated.getMethods())
-			if(method.getAnnotation(Revision.class)!=null)
-				return new Update(method);
+		
 		return null;
 	}
 
@@ -87,7 +83,18 @@ public class Update {
 			Update extract = Update.extract(extractedClasses);
 			if(extract!=null)
 				updateList.add(extract);
+			updateList.addAll(Update.findUpdatesInMethods(extractedClasses.getMethods()));
+			
 		}
+		return updateList;
+	}
+
+	private static Collection<? extends Update> findUpdatesInMethods(
+			Method[] methods) {
+		List<Update> updateList = new ArrayList<Update>();
+		for(Method method:methods)
+			if(method.getAnnotation(Revision.class)!=null)
+				updateList.add(new Update(method));
 		return updateList;
 	}
 

@@ -1,6 +1,9 @@
 package annotation.revision;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
+
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -49,12 +52,12 @@ public class GetRevisionTest {
 	@Test
 	public void extractedAnnotatedMethods() throws Exception {
 		
-		assertEquals(new Update("Updater", "06.29.2015", "Bla Bla method"), Update.extract(UpdatedMethod.class));
-		try{
-		assertNull("When no annotated method NULL returns.", Update.extract(NoUpdatedMethod.class));
-		} catch (Exception e){
-			fail();
-		}
+		assertEquals(
+				asList(new Update("Updater", "06.29.2015", "Bla Bla method"))
+				, Update.convertToList(asList(UpdatedMethod.class)));
+		assertTrue("When no annotated method NULL returns."
+				, Update.convertToList(asList(NoUpdatedMethod.class)).isEmpty());
+		
 	}
 	
 }
