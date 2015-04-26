@@ -81,5 +81,11 @@ public class Update {
 		return convertToList(jarArchive.extractClasses());
 	}
 
+	@Override
+	public String toString() {
+		return "Update [name=" + name + ", date=" + date + ", comment="
+				+ comment + "]";
+	}
+
 	
 }
