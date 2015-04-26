@@ -1,5 +1,6 @@
 package annotation.revision;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +25,22 @@ public class Update {
 		this.comment = comment;
 	}
 
+	public Update(Method method) {
+		Revision revision = (Revision) method.getAnnotation(Revision.class);
+		name =  revision.name();
+		date =   revision.date();
+		comment = revision.comment();
+	}
+
+	/*
+	 * Problem detected - this method can extracted either one class annotaion or one method annotation.
+	 * */
 	public static Update extract(Class updated) {
 		if(updated.getAnnotation(Revision.class)!=null)
 			return new Update(updated);
+		for(Method method:updated.getMethods())
+			if(method.getAnnotation(Revision.class)!=null)
+				return new Update(method);
 		return null;
 	}
 

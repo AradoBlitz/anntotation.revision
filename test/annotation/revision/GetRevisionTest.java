@@ -38,4 +38,23 @@ public class GetRevisionTest {
 		assertNull("getAnnotation should return null.",noAnnotatedClass.getAnnotation(Revision.class));
 	}
 	
+	public static class UpdatedMethod{
+		@Revision(comment = "Bla Bla method", date = "06.29.2015", name = "Updater")
+		public void foo(){}
+	}
+	
+	public static class NoUpdatedMethod{
+		public void foo(){};
+	}
+	@Test
+	public void extractedAnnotatedMethods() throws Exception {
+		
+		assertEquals(new Update("Updater", "06.29.2015", "Bla Bla method"), Update.extract(UpdatedMethod.class));
+		try{
+		assertNull("When no annotated method NULL returns.", Update.extract(NoUpdatedMethod.class));
+		} catch (Exception e){
+			fail();
+		}
+	}
+	
 }
