@@ -3,6 +3,7 @@ package annotation.revision;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +11,27 @@ import java.util.List;
 public class UpdateDao {
 
 	private  final List<Update> updateList = new ArrayList<Update>();
+	private String url;
+	private String login;
+	private String password;
 
 	public UpdateDao(List<Update> updateList){
 		this.updateList.addAll(updateList);
 	}
 	
+	public UpdateDao(String url, String login, String password) {
+		this.url = url;
+		this.login = login;
+		this.password = password;
+	}
+
 	public void saveTo(String path, String user, String pass) throws Exception {
-		Connection connection = DriverManager.getConnection(path,user,pass);
+		new UpdateDao(path,user,pass).save(updateList);
+		
+	}
+
+	private UpdateDao save(List<Update> updateList) throws SQLException {
+		Connection connection = DriverManager.getConnection(url,login,password);
 		Statement stmt = connection.createStatement();
 		try{
 			for(Update update:updateList)		
@@ -25,6 +40,7 @@ public class UpdateDao {
 			stmt.close();
 			connection.close();
 		}
+		return null;
 	}
 
 	@Override
@@ -59,6 +75,7 @@ public class UpdateDao {
 	}
 
 	public static List<Update> loadFrom(String url, String login, String password) throws Exception {
+	
 		List<Update> list = new ArrayList<Update>();
 		Connection connection = DriverManager.getConnection(url,login,password);
 		Statement stmt = connection.createStatement();
