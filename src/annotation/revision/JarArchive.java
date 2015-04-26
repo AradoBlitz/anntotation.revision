@@ -73,7 +73,7 @@ public class JarArchive extends ClassLoader{
 	}
 
 	public List<Class> extractClasses() throws Exception {
-		// TODO Auto-generated method stub
+	
 		return extractClasses(pathToJar);
 	}
 
