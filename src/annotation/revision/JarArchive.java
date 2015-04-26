@@ -15,6 +15,17 @@ import java.util.zip.ZipInputStream;
 
 public class JarArchive extends ClassLoader{
 	
+	private String pathToJar;
+
+	public JarArchive() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public JarArchive(String pathToJar) {
+		this.pathToJar = pathToJar;
+		// TODO Auto-generated constructor stub
+	}
+
 	public Class toClass(ZipFile zipFile, ZipEntry entry) throws Exception{
 		return toClass(entry.getName().replaceAll("/", ".").replaceAll(".class", ""), zipFile.getInputStream(entry));
 	}
@@ -58,7 +69,12 @@ public class JarArchive extends ClassLoader{
 
 	public UpdateDao readPackage(String pathToJar) throws Exception {
 		
-		return new UpdateDao(Update.convertToList(extractClasses(pathToJar)));
+		return new UpdateDao(Update.convertToList(new JarArchive(pathToJar)));
+	}
+
+	public List<Class> extractClasses() throws Exception {
+		// TODO Auto-generated method stub
+		return extractClasses(pathToJar);
 	}
 
 	

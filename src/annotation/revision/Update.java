@@ -77,5 +77,9 @@ public class Update {
 		return updateList;
 	}
 
+	public static List<Update> convertToList(JarArchive jarArchive) throws Exception {
+		return convertToList(jarArchive.extractClasses());
+	}
+
 	
 }
