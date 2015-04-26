@@ -36,7 +36,7 @@ public class UnpackArchiveTest {
 		
 	@Test
 	public void truncatedClassExample() throws Exception {
-		byte[] buffer = new byte[1024*4];
+		byte[] buffer = new byte[1024*6];
 		InputStream input = new FileInputStream("/home/dmitriy/Projects/Java/portfolio/annotation.revision/bin/annotation/revision/UpdateDao.class");
 		int read = input.read(buffer);
 		assertNotNull(new JarArchive().defineClass("annotation.revision.UpdateDao",Arrays.copyOf(buffer , read)));
