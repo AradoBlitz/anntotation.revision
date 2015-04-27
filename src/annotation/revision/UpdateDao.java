@@ -13,7 +13,7 @@ public class UpdateDao {
 	private  final List<Update> updateList = new ArrayList<Update>();
 	private Connection connection;
 
-	public UpdateDao(List<Update> updateList){
+	private UpdateDao(List<Update> updateList){
 		this.updateList.addAll(updateList);
 	}
 	
@@ -119,6 +119,6 @@ public class UpdateDao {
 		updateDao.connection.createStatement().executeUpdate("create table revision (author CHAR(10),date CHAR(10),comment CHAR(100));");
 		return updateDao;
 	}
-
+	
 	
 }

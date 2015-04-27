@@ -48,22 +48,6 @@ public class GetRevisionDbTest {
 	}
 	
 	@Test
-	public void UpdateDaoequality() throws Exception {
-		assertEquals(new UpdateDao(asList(new Update("Vass","30.06.2015","Bla Bla"))), new UpdateDao(asList(new Update("Vass","30.06.2015","Bla Bla"))));
-		try{
-		assertFalse(
-				new UpdateDao(asList(new Update("Peter","27.09.2015","Bla Bla")))
-					.equals(new UpdateDao(new ArrayList<Update>())));
-		}catch (NullPointerException e){
-			e.printStackTrace();
-			fail();
-		}
-		assertFalse(
-				new UpdateDao(asList(new Update("Peter","27.09.2015","Bla Bla")))
-					.equals(new UpdateDao(asList(new Update("Vass","30.06.2015","Bla Bla")))));
-	}
-	
-	@Test
 	public void createEmbeddedDataBase() throws Exception {
 		
 		assertFalse("Connection should be openned.",connection.isClosed());
