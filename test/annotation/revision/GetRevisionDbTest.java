@@ -22,13 +22,14 @@ public class GetRevisionDbTest {
 	
 	private Connection connection;
 	
+	private UpdateDao updateDao;
 
 	@Before
 	public void createConnection() throws Exception {
+		
 		Class.forName("org.hsqldb.jdbcDriver");
 		connection = DriverManager.getConnection("jdbc:hsqldb:mem:test","sa","");
-		connection.createStatement().executeUpdate("create table revision (author CHAR(10),date CHAR(10),comment CHAR(100));");
-	
+		updateDao = new UpdateDao(connection);
 	}
 	
 	@After
@@ -38,29 +39,9 @@ public class GetRevisionDbTest {
 	}
 
 	@Test
-	public void addToDataBaseRevisionDataFromClass() throws Exception {
-		UpdateDao updateDao = new UpdateDao(asList(new Update("Vass","30.06.2015","Bla Bla")));
-		
-		updateDao.saveTo("jdbc:hsqldb:mem:test","sa","");
-		
-		ResultSet result = connection.createStatement().executeQuery("select * from revision");
-		assertTrue(result.next());
-		String name = result.getString("author");		
-		String date = result.getString("date");		
-		String comment = result.getString("comment");
-		Update expected = new Update("Vass      ", "30.06.2015", "Bla Bla                                                                                             ");
-		assertEquals(expected.name, name);
-		assertEquals(expected.date, date);
-		assertEquals(expected.comment, comment);
-		assertFalse(result.next());
-	}
-	
-	@Test
 	public void readWriteUpdatesToDb() throws Exception {
-		UpdateDao updateDao = new UpdateDao(asList(new Update("Vass","30.06.2015","Bla Bla")));
-		
-		updateDao.saveTo("jdbc:hsqldb:mem:test","sa","");
-		List<Update> actual = UpdateDao.loadFrom("jdbc:hsqldb:mem:test","sa","");
+		this.updateDao.save(asList(new Update("Vass","30.06.2015","Bla Bla")));
+		List<Update> actual = this.updateDao.loadUpdates();
 		
 		Update expected = new Update("Vass      ", "30.06.2015", "Bla Bla                                                                                             ");
 		assertEquals(expected, actual.get(0));

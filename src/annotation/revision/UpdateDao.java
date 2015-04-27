@@ -11,18 +11,20 @@ import java.util.List;
 public class UpdateDao {
 
 	private  final List<Update> updateList = new ArrayList<Update>();
-	private String url;
-	private String login;
-	private String password;
+	private Connection connection;
 
 	public UpdateDao(List<Update> updateList){
 		this.updateList.addAll(updateList);
 	}
 	
-	public UpdateDao(String url, String login, String password) {
-		this.url = url;
-		this.login = login;
-		this.password = password;
+	private UpdateDao(String url, String login, String password) throws SQLException {
+		this(DriverManager.getConnection(url,login,password));
+	}
+	
+	public UpdateDao(Connection connection) throws SQLException{
+		this.connection = connection;	
+		connection.createStatement().executeUpdate("create table revision (author CHAR(10),date CHAR(10),comment CHAR(100));");
+		
 	}
 
 	public void saveTo(String path, String user, String pass) throws Exception {
@@ -30,15 +32,15 @@ public class UpdateDao {
 		
 	}
 
-	private UpdateDao save(List<Update> updateList) throws SQLException {
-		Connection connection = DriverManager.getConnection(url,login,password);
+	public UpdateDao save(List<Update> updateList) throws SQLException {
+		
 		Statement stmt = connection.createStatement();
 		try{
 			for(Update update:updateList)		
 				stmt.executeUpdate("insert into revision values ('" + update.name + "','" + update.date + "','" + update.comment + "');");
 		}finally{
 			stmt.close();
-			connection.close();
+		
 		}
 		return null;
 	}
@@ -92,6 +94,24 @@ public class UpdateDao {
 			result.close();
 			stmt.close();
 			connection.close();
+		}
+	}
+
+	public List<Update> loadUpdates() throws Exception {
+		List<Update> list = new ArrayList<Update>();
+		Statement stmt = connection.createStatement();
+		ResultSet result = stmt.executeQuery("select * from revision");
+		try{
+			while (result.next()){
+				String name = result.getString("author");		
+				String date = result.getString("date");		
+				String comment = result.getString("comment");
+				list.add(new Update(name, date, comment));
+			}
+			return list;
+		}finally{
+			result.close();
+			stmt.close();			
 		}
 	}
 
