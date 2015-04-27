@@ -29,7 +29,7 @@ public class GetRevisionDbTest {
 		
 		Class.forName("org.hsqldb.jdbcDriver");
 		connection = DriverManager.getConnection("jdbc:hsqldb:mem:test","sa","");
-		updateDao = new UpdateDao(connection);
+		updateDao = UpdateDao.createRevision(new UpdateDao(connection));
 	}
 	
 	@After

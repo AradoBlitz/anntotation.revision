@@ -20,21 +20,25 @@ import javax.swing.table.TableModel;
 
 public class RevisionManager {
 
+	static class UpdateTable{}
+	
 	public static void main(String[] args) {
 		JFrame mainWindow = new JFrame("Revision Manager.");
+		UpdateTable updateTable = new UpdateTable();
 		DefaultTableModel dataModel = new DefaultTableModel(
 				new Object[][]{}
 				,new Object[]{"#","Author","Date","Comment"});
 		JTable table = new JTable(dataModel);
+		//updateTable.update
+		UpdateDao updateDao = null;
 		try {
 			Class.forName("org.hsqldb.jdbcDriver");
 			Connection connection = DriverManager.getConnection("jdbc:hsqldb:mem:test","sa","");
-			connection.createStatement().executeUpdate("create table revision (author CHAR(10),date CHAR(10),comment CHAR(100));");
+			updateDao = UpdateDao.createRevision(new UpdateDao(connection));
+			updateDao.save(Arrays.asList(new Update("Alex","11.02.2015","Did somthing")
+			,new Update("Peter","18.07.2015","Fixed somthing")));
 			
-			new UpdateDao(Arrays.asList(new Update("Alex","11.02.2015","Did somthing")
-			,new Update("Peter","18.07.2015","Fixed somthing")))
-				.saveTo("jdbc:hsqldb:mem:test","sa","");
-			List<Update> updates = UpdateDao.loadFrom("jdbc:hsqldb:mem:test","sa","");
+			List<Update> updates = updateDao.loadUpdates();
 			int i=1;
 			for(Update update: updates)
 				dataModel.addRow(new Object[]{i++,update.name,update.date,update.comment});
@@ -46,6 +50,7 @@ public class RevisionManager {
 		JPanel addJarPanel = new JPanel();
 		JButton addJarSubmit = new JButton("Add Jar");
 		addJarPanel.add(addJarSubmit);
+		final UpdateDao dao = updateDao;
 		addJarSubmit.addActionListener(new ActionListener() {
 			
 			@Override
@@ -53,11 +58,9 @@ public class RevisionManager {
 				JFileChooser fileChooser = new JFileChooser(new File("./"));
 				if(JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(addJarPanel))
 					try {
-						new JarArchive()
-							.readPackage(fileChooser.getSelectedFile().getAbsolutePath())
-							.saveTo("jdbc:hsqldb:mem:test","sa","");
 						
-						List<Update> updates = UpdateDao.loadFrom("jdbc:hsqldb:mem:test","sa","");
+						dao.save(Update.convertToList(new JarArchive(fileChooser.getSelectedFile().getAbsolutePath())));
+						List<Update> updates = dao.loadUpdates();
 						DefaultTableModel dataModel = new DefaultTableModel(
 								new Object[][]{}
 								,new Object[]{"#","Author","Date","Comment"});

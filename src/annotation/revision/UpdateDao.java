@@ -23,7 +23,7 @@ public class UpdateDao {
 	
 	public UpdateDao(Connection connection) throws SQLException{
 		this.connection = connection;	
-		connection.createStatement().executeUpdate("create table revision (author CHAR(10),date CHAR(10),comment CHAR(100));");
+		
 		
 	}
 
@@ -113,6 +113,11 @@ public class UpdateDao {
 			result.close();
 			stmt.close();			
 		}
+	}
+
+	public static UpdateDao createRevision(UpdateDao updateDao) throws SQLException {
+		updateDao.connection.createStatement().executeUpdate("create table revision (author CHAR(10),date CHAR(10),comment CHAR(100));");
+		return updateDao;
 	}
 
 	
