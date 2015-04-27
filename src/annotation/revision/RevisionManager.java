@@ -63,12 +63,27 @@ public class RevisionManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		mainWindow
+		.getContentPane()
+		.add(createExtractUpdatesFromJarPanel(updateTable,
+				updateDao),BorderLayout.NORTH);
+	
 		
+		mainWindow
+			.getContentPane()
+			.add(updateTable.getTablePanel()
+						,BorderLayout.CENTER);
+		
+		mainWindow.setSize(300, 300);
+		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainWindow.setVisible(true);
+	}
+
+	private static JPanel createExtractUpdatesFromJarPanel(
+			UpdateTable updateTable, UpdateDao updateDao) {
 		JPanel addJarPanel = new JPanel();
-		JButton addJarSubmit = new JButton("Add Jar");
-		addJarPanel.add(addJarSubmit);
 		final UpdateDao dao = updateDao;
-		addJarSubmit.addActionListener(new ActionListener() {
+		ActionListener addJarButtoListener = new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -85,21 +100,13 @@ public class RevisionManager {
 					}
 				
 			}
-		});
+		};
 		
-		mainWindow
-		.getContentPane()
-		.add(addJarPanel,BorderLayout.NORTH);
-	
 		
-		mainWindow
-			.getContentPane()
-			.add(updateTable.getTablePanel()
-						,BorderLayout.CENTER);
-		
-		mainWindow.setSize(300, 300);
-		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainWindow.setVisible(true);
+		JButton addJarSubmit = new JButton("Add Jar");
+		addJarPanel.add(addJarSubmit);	
+		addJarSubmit.addActionListener(addJarButtoListener);
+		return addJarPanel;
 	}
 
 }
