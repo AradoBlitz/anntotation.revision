@@ -55,9 +55,9 @@ public class RevisionManager {
 			UpdateDao updateDao = UpdateDao
 					.createRevisionTable(
 							new UpdateDao(DriverManager.getConnection("jdbc:hsqldb:mem:test","sa","")));
-			addStubData(updateDao,updateTable,new Update("Alex","11.02.2015","Did somthing")
+		/*	addStubData(updateDao,updateTable,new Update("Alex","11.02.2015","Did somthing")
 			,new Update("Peter","18.07.2015","Fixed somthing"));
-			
+			*/
 			
 		
 			mainWindow
