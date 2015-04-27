@@ -27,7 +27,6 @@ public class GetRevisionDbTest {
 	@Before
 	public void createConnection() throws Exception {
 		
-		Class.forName("org.hsqldb.jdbcDriver");
 		connection = DriverManager.getConnection("jdbc:hsqldb:mem:test","sa","");
 		updateDao = UpdateDao.createRevision(new UpdateDao(connection));
 	}

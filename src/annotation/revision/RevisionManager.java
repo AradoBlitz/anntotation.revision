@@ -52,7 +52,7 @@ public class RevisionManager {
 		
 		UpdateDao updateDao = null;
 		try {
-			Class.forName("org.hsqldb.jdbcDriver");
+			
 			Connection connection = DriverManager.getConnection("jdbc:hsqldb:mem:test","sa","");
 			updateDao = UpdateDao.createRevision(new UpdateDao(connection));
 			updateDao.save(Arrays.asList(new Update("Alex","11.02.2015","Did somthing")

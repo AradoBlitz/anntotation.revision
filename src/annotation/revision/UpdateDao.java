@@ -10,6 +10,15 @@ import java.util.List;
 
 public class UpdateDao {
 
+	static{
+		try {
+			Class.forName("org.hsqldb.jdbcDriver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	private  final List<Update> updateList = new ArrayList<Update>();
 	private Connection connection;
 
