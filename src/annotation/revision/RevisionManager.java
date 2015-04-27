@@ -20,28 +20,45 @@ import javax.swing.table.TableModel;
 
 public class RevisionManager {
 
-	static class UpdateTable{}
+	static class UpdateTable{
+
+		private JTable table;
+		
+		public UpdateTable(){
+			table = new JTable();
+		}
+		
+		public void refresh(List<Update> updates) {
+			DefaultTableModel dataModel = new DefaultTableModel(
+					new Object[][]{}
+					,new Object[]{"#","Author","Date","Comment"});
+			int i=1;
+			for(Update update: updates)
+				dataModel.addRow(new Object[]{i++,update.name,update.date,update.comment});
+			table.setModel(dataModel);
+			
+		}
+
+		public JScrollPane getTablePanel() {
+		
+			return  new JScrollPane(table);
+		}
+		
+	}
 	
 	public static void main(String[] args) {
 		JFrame mainWindow = new JFrame("Revision Manager.");
 		UpdateTable updateTable = new UpdateTable();
-		DefaultTableModel dataModel = new DefaultTableModel(
-				new Object[][]{}
-				,new Object[]{"#","Author","Date","Comment"});
-		JTable table = new JTable(dataModel);
-		//updateTable.update
+		
 		UpdateDao updateDao = null;
 		try {
 			Class.forName("org.hsqldb.jdbcDriver");
 			Connection connection = DriverManager.getConnection("jdbc:hsqldb:mem:test","sa","");
 			updateDao = UpdateDao.createRevision(new UpdateDao(connection));
 			updateDao.save(Arrays.asList(new Update("Alex","11.02.2015","Did somthing")
-			,new Update("Peter","18.07.2015","Fixed somthing")));
+			,new Update("Peter","18.07.2015","Fixed somthing")));			
+			updateTable.refresh(updateDao.loadUpdates());
 			
-			List<Update> updates = updateDao.loadUpdates();
-			int i=1;
-			for(Update update: updates)
-				dataModel.addRow(new Object[]{i++,update.name,update.date,update.comment});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,14 +77,8 @@ public class RevisionManager {
 					try {
 						
 						dao.save(Update.convertToList(new JarArchive(fileChooser.getSelectedFile().getAbsolutePath())));
-						List<Update> updates = dao.loadUpdates();
-						DefaultTableModel dataModel = new DefaultTableModel(
-								new Object[][]{}
-								,new Object[]{"#","Author","Date","Comment"});
-						int i=1;
-						for(Update update: updates)
-							dataModel.addRow(new Object[]{i++,update.name,update.date,update.comment});
-						table.setModel(dataModel);
+						updateTable.refresh(dao.loadUpdates());
+						
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -83,8 +94,7 @@ public class RevisionManager {
 		
 		mainWindow
 			.getContentPane()
-			.add(new JScrollPane(
-					table)
+			.add(updateTable.getTablePanel()
 						,BorderLayout.CENTER);
 		
 		mainWindow.setSize(300, 300);
