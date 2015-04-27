@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,34 +50,42 @@ public class RevisionManager {
 	public static void main(String[] args) {
 		JFrame mainWindow = new JFrame("Revision Manager.");
 		UpdateTable updateTable = new UpdateTable();
-		
-		UpdateDao updateDao = null;
 		try {
+					
+			UpdateDao updateDao = UpdateDao
+					.createRevisionTable(
+							new UpdateDao(DriverManager.getConnection("jdbc:hsqldb:mem:test","sa","")));
+			addStubData(updateDao,updateTable,new Update("Alex","11.02.2015","Did somthing")
+			,new Update("Peter","18.07.2015","Fixed somthing"));
 			
-			Connection connection = DriverManager.getConnection("jdbc:hsqldb:mem:test","sa","");
-			updateDao = UpdateDao.createRevision(new UpdateDao(connection));
-			updateDao.save(Arrays.asList(new Update("Alex","11.02.2015","Did somthing")
-			,new Update("Peter","18.07.2015","Fixed somthing")));			
-			updateTable.refresh(updateDao.loadUpdates());
+			
+		
+			mainWindow
+			.getContentPane()
+			.add(createExtractUpdatesFromJarPanel(updateTable,
+					updateDao),BorderLayout.NORTH);
+		
+			
+			mainWindow
+				.getContentPane()
+				.add(updateTable.getTablePanel()
+							,BorderLayout.CENTER);
+			
+			mainWindow.setSize(300, 300);
+			mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			mainWindow.setVisible(true);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		mainWindow
-		.getContentPane()
-		.add(createExtractUpdatesFromJarPanel(updateTable,
-				updateDao),BorderLayout.NORTH);
-	
+	}
+
+	private static void addStubData(UpdateDao updateDao, UpdateTable updateTable,Update... updates) throws Exception {
+		updateDao.save(Arrays.asList(new Update("Alex","11.02.2015","Did somthing")
+		,new Update("Peter","18.07.2015","Fixed somthing")));			
+		updateTable.refresh(updateDao.loadUpdates());
 		
-		mainWindow
-			.getContentPane()
-			.add(updateTable.getTablePanel()
-						,BorderLayout.CENTER);
-		
-		mainWindow.setSize(300, 300);
-		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainWindow.setVisible(true);
 	}
 
 	private static JPanel createExtractUpdatesFromJarPanel(

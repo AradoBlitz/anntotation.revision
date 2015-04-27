@@ -73,6 +73,7 @@ public class GetRevisionTest {
 		assertTrue("When no annotated method NULL returns."
 				, Update.convertToList(asList(NoUpdatedMethod.class)).isEmpty());
 		List<Update> convertToList = Update.convertToList(asList(DoubleMethodUpdated.class));
+		//TODO Order is unpredictable, but very often its backwards against the order of annotated methods in class.
 		assertEquals(new Update("Updater foo", "07.12.2015", "Bla Bla method foo"),convertToList.get(1));
 		assertEquals(new Update("Updater goo", "29.06.2015", "Bla Bla method goo"),convertToList.get(0));
 		

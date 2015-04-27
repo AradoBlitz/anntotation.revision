@@ -9,6 +9,7 @@ public class Update {
 
 	public final String name;
 	
+	//TODO Replace with Date type
 	public final String date;
 	
 	public final String comment;
